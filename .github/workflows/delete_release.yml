@@ -20,7 +20,7 @@ jobs:
         id: delete_release
         shell: bash
         env:
-          GH_TOKEN: ${{ secrets.SUSHI_GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # このステップは、hotfix_target_release_tagが「Pre-release」の場合のみ実行
         if: gh release view --json isPrerelease -q .isPrerelease ${{ github.event.inputs.delete_target_release_tag }} == true
         run: gh release delete ${{ github.event.inputs.delete_target_release_tag }}
