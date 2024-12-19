@@ -27,6 +27,6 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # このステップは、hotfix_target_release_tagが「Pre-release」の場合のみ実行
-        if: gh release view --json isPrerelease -q .isPrerelease ${{ github.event.inputs.delete_target_release_tag }} == true
+        # このステップは、delete_target_release_tagのreleaseが「Pre-release」の場合のみ実行
+        if: gh release view --json isPrerelease -q .isPrerelease ${{ github.event.inputs.delete_target_release_tag }}
         run: gh release delete ${{ github.event.inputs.delete_target_release_tag }}
