@@ -36,6 +36,19 @@ jobs:
           fetch-depth: '0'
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: confirmation
+        id: confirmation
+        shell: bash
+        run: |
+          echo "削除対象のリリースは、以下の通りです。"
+          gh release view ${{ github.event.inputs.delete_target_release_tag }}
+          echo "削除してよろしいですか？"
+          read -p "y/n: " yn
+          if [ $yn != "y" ]; then
+            echo "削除を中止しました。"
+            exit 1
+          fi
+
       - name: delete release
         id: delete_release
         shell: bash
