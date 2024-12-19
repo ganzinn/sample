@@ -40,20 +40,13 @@ jobs:
         id: confirmation
         shell: bash
         run: |
-          echo "削除対象のリリースは、以下の通りです。"
-          gh release view ${{ github.event.inputs.delete_target_release_tag }}
-          echo "削除してよろしいですか？"
-          read -p "y/n: " yn
-          if [ $yn != "y" ]; then
-            echo "削除を中止しました。"
-            exit 1
-          fi
+          echo ${{ needs.setup_environment.outputs.is_prerelease }}
 
-      - name: delete release
-        id: delete_release
-        shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # このステップは、delete_target_release_tagのreleaseが「Pre-release」の場合のみ実行
-        if: ${{ needs.setup_environment.outputs.is_prerelease }} == true
-        run: gh release delete ${{ github.event.inputs.delete_target_release_tag }}
+      # - name: delete release
+      #   id: delete_release
+      #   shell: bash
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   # このステップは、delete_target_release_tagのreleaseが「Pre-release」の場合のみ実行
+      #   if: ${{ needs.setup_environment.outputs.is_prerelease }} == true
+      #   run: gh release delete ${{ github.event.inputs.delete_target_release_tag }}
