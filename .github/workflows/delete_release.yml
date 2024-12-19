@@ -1,0 +1,29 @@
+name: delete release
+on:
+  workflow_dispatch:
+    inputs:
+      pick_hash:
+        required: true
+        description: '指定したタグのリリースを削除します。（pre-releaseラベルがある場合に限る）'
+      delete_target_release_tag:
+        description: '削除したいリリースのタグを指定してください。'
+        required: true
+        type: string
+
+env:
+  TZ: 'Asia/Tokyo'
+  REPOSITORY_OWNER: ganzinn
+  REPOSITORY_NAME: sample
+
+jobs:
+  delete_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: delete hotfix_target_release_tag
+        id: delete_hotfix_target_release_tag
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.SUSHI_GITHUB_TOKEN }}
+        # このステップは、hotfix_target_release_tagが「Pre-release」の場合のみ実行
+        if: gh release view --json isPrerelease -q .isPrerelease ${{ github.event.inputs.hotfix_target_release_tag }} == true
+        run: gh release delete ${{ github.event.inputs.hotfix_target_release_tag }}
