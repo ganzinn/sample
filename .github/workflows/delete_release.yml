@@ -22,7 +22,13 @@ jobs:
     steps:
       - name: output is_prerelease
         id: is_prerelease
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          is_prerelease=$(gh release view --json isPrerelease -q .isPrerelease ${{ github.event.inputs.delete_target_release_tag }})
+          echo $is_prerelease
+          echo "is_prerelease=$is_prerelease" >> $GITHUB_OUTPUT
           gh release view --json isPrerelease -q .isPrerelease ${{ github.event.inputs.delete_target_release_tag }}
 
   delete_release:
