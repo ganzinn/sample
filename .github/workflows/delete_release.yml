@@ -36,6 +36,7 @@ jobs:
         shell: bash
         run: |
           echo ${{ steps.is_prerelease.outputs.is_prerelease }}
+          echo `${{ steps.is_prerelease.outputs.is_prerelease }} == 'true'`
 
       - name: delete release
         id: delete_release
