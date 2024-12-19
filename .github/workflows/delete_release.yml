@@ -2,9 +2,6 @@ name: delete release
 on:
   workflow_dispatch:
     inputs:
-      pick_hash:
-        required: true
-        description: '指定したタグのリリースを削除します。（pre-releaseラベルがある場合に限る）'
       delete_target_release_tag:
         description: '削除したいリリースのタグを指定してください。'
         required: true
