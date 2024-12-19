@@ -42,5 +42,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # このステップは、delete_target_release_tagのreleaseが「Pre-release」の場合のみ実行
-        if: ${{ needs.setup_environment.outputs.is_prerelease }} == true
-        run: gh release delete ${{ github.event.inputs.delete_target_release_tag }}
+        # if: ${{ needs.setup_environment.outputs.is_prerelease }} == true
+        # run: gh release delete ${{ github.event.inputs.delete_target_release_tag }}
+        run: |
+          if [ "${{ needs.setup_environment.outputs.is_prerelease }}" ]; then
+            gh release delete ${{ github.event.inputs.delete_target_release_tag }}
+          fi
