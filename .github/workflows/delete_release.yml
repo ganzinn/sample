@@ -13,12 +13,8 @@ env:
   REPOSITORY_NAME: sample
 
 jobs:
-  setup_environment:
+  delete_release:
     runs-on: ubuntu-latest
-
-    outputs:
-      is_prerelease: ${{ steps.is_prerelease.outputs.is_prerelease }}
-
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,25 +29,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           is_prerelease=$(gh release view --json isPrerelease -q .isPrerelease ${{ github.event.inputs.delete_target_release_tag }})
-          echo $is_prerelease
           echo "is_prerelease=$is_prerelease" >> $GITHUB_OUTPUT
-          gh release view --json isPrerelease -q .isPrerelease ${{ github.event.inputs.delete_target_release_tag }}
-
-  delete_release:
-    runs-on: ubuntu-latest
-    needs: [setup_environment]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.delete_target_release_tag }}
-          fetch-depth: '0'
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: confirmation
         id: confirmation
         shell: bash
         run: |
-          echo ${{ needs.setup_environment.outputs.is_prerelease }}
+          echo ${{ steps.is_prerelease.outputs.is_prerelease }}
 
       # - name: delete release
       #   id: delete_release
