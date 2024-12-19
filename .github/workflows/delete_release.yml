@@ -13,6 +13,19 @@ env:
   REPOSITORY_NAME: sample
 
 jobs:
+  setup_environment:
+    runs-on: ubuntu-latest
+
+    outputs:
+      is_prerelease: ${{ steps.is_prerelease.outputs.is_prerelease }}
+
+    steps:
+      - name: output is_prerelease
+        id: is_prerelease
+        run: |
+          is_prerelease=$(echo `gh release view --json isPrerelease -q .isPrerelease ${{ github.event.inputs.delete_target_release_tag }}`)
+          echo "is_prerelease=$is_prerelease" >> $GITHUB_OUTPUT
+
   delete_release:
     runs-on: ubuntu-latest
     steps:
@@ -28,5 +41,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # このステップは、delete_target_release_tagのreleaseが「Pre-release」の場合のみ実行
-        if: gh release view --json isPrerelease -q .isPrerelease ${{ github.event.inputs.delete_target_release_tag }}
+        if: needs.setup_environment.outputs.is_prerelease
         run: gh release delete ${{ github.event.inputs.delete_target_release_tag }}
