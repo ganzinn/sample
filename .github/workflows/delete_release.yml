@@ -23,7 +23,7 @@ jobs:
       - name: output is_prerelease
         id: is_prerelease
         run: |
-          is_prerelease=$(gh release view --json isPrerelease -q .isPrerelease "${{ github.event.inputs.delete_target_release_tag }}"" 2>/dev/null)
+          is_prerelease=$(gh release view --json isPrerelease -q .isPrerelease "${{ github.event.inputs.delete_target_release_tag }}" 2>/dev/null)
           echo $is_prerelease
           echo "is_prerelease=$is_prerelease" >> $GITHUB_OUTPUT
 
