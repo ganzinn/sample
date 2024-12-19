@@ -24,7 +24,6 @@ jobs:
         id: is_prerelease
         run: |
           is_prerelease=$(echo `gh release view --json isPrerelease -q .isPrerelease ${{ github.event.inputs.delete_target_release_tag }}`)
-          echo "is_prerelease=$is_prerelease"
           echo "is_prerelease=$is_prerelease" >> $GITHUB_OUTPUT
 
   delete_release:
@@ -43,5 +42,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # このステップは、delete_target_release_tagのreleaseが「Pre-release」の場合のみ実行
-        if: needs.setup_environment.outputs.is_prerelease == 'true'
+        if: ${{ needs.setup_environment.outputs.is_prerelease }}
         run: gh release delete ${{ github.event.inputs.delete_target_release_tag }}
