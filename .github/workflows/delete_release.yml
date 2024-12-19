@@ -45,6 +45,6 @@ jobs:
         # if: ${{ needs.setup_environment.outputs.is_prerelease }} == true
         # run: gh release delete ${{ github.event.inputs.delete_target_release_tag }}
         run: |
-          if [ "${{ needs.setup_environment.outputs.is_prerelease }}" ]; then
+          if [ `gh release view --json isPrerelease -q .isPrerelease ${{ github.event.inputs.delete_target_release_tag }}` ]; then
             gh release delete ${{ github.event.inputs.delete_target_release_tag }}
           fi
