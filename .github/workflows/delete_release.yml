@@ -37,11 +37,11 @@ jobs:
         run: |
           echo ${{ steps.is_prerelease.outputs.is_prerelease }}
 
-      # - name: delete release
-      #   id: delete_release
-      #   shell: bash
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   # このステップは、delete_target_release_tagのreleaseが「Pre-release」の場合のみ実行
-      #   if: ${{ needs.setup_environment.outputs.is_prerelease }} == true
-      #   run: gh release delete ${{ github.event.inputs.delete_target_release_tag }}
+      - name: delete release
+        id: delete_release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # 「Pre-release」ラベルがある場合のみ実行
+        if: steps.is_prerelease.outputs.is_prerelease
+        run: gh release delete ${{ github.event.inputs.delete_target_release_tag }}
