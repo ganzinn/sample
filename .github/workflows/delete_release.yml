@@ -20,6 +20,12 @@ jobs:
       is_prerelease: ${{ steps.is_prerelease.outputs.is_prerelease }}
 
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.delete_target_release_tag }}
+          fetch-depth: '0'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: output is_prerelease
         id: is_prerelease
         shell: bash
